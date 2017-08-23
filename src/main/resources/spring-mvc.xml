@@ -1,0 +1,89 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<context:property-placeholder location="classpath:resources.properties" />
+
+	<!-- 开启自动扫描，发现@Configuration,@Controller,@ControllerAdvice标注的类，注册为bean -->
+	<!-- 注意事项请参考：http://jinnianshilongnian.iteye.com/blog/1762632 -->
+	<context:component-scan
+		base-package="com.bizdata.**.controller,com.bizdata.**.exception,com.bizdata.**.springmvc_configuration"
+		use-default-filters="false">
+		<!-- 配合use-default-filters="false"，只扫描@Controller注解 -->
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+		<!-- 配合use-default-filters="false"，只扫描@ControllerAdvice注解 -->
+		<context:include-filter type="annotation"
+			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+		<!-- 配合use-default-filters="false"，只扫描@Configuration注解 -->
+		<context:include-filter type="annotation"
+			expression="org.springframework.context.annotation.Configuration" />
+	</context:component-scan>
+
+	<!-- 开启aop支持 -->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	
+	<!-- app接口鉴权切面 -->
+	<bean class="com.bizdata.framework.aspect.AppAuthAspect"></bean>
+
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/admin/login"/>
+			<bean class="com.bizdata.framework.interceptors.HistoryBackInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg value="UTF-8" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!-- 静态资源映射 -->
+	<mvc:resources mapping="/assets/**" location="/assets/" />
+	<mvc:resources mapping="/images/**" location="/images/" />
+	<mvc:resources mapping="/styles/**" location="/styles/" />
+	<mvc:resources mapping="/scripts/**" location="/scripts/" />
+	<mvc:resources mapping="/upload/**" location="/upload/" />
+
+	<!-- 当在web.xml 中 DispatcherServlet使用 <url-pattern>/</url-pattern> 映射时，能映射静态资源 -->
+	<mvc:default-servlet-handler />
+
+	<!-- 默认的视图解析器 在上边的解析错误时使用 (默认使用html)- -->
+	<bean id="defaultViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:order="1">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="contentType" value="text/html" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!-- Controller异常处理，需要声明此bean -->
+	<bean id="exceptionHandlerExceptionResolver"
+		class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
+	</bean>
+
+	<!-- 配置MultipartResolver 用于文件上传 使用spring的CommosMultipartResolver -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+		p:defaultEncoding="UTF-8" p:maxUploadSize="5400000">
+	</bean>
+
+	<bean id="loggerInjector" class="com.bizdata.commons.LoggerInjector"></bean>
+
+	<import resource="spring-mvc-shiro.xml" />
+</beans>

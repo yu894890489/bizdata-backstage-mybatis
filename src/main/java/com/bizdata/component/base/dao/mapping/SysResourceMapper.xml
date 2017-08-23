@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bizdata.component.base.dao.SysResourceMapper">
+	<resultMap id="BaseResultMap"
+		type="com.bizdata.component.base.entity.SysResource">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="type" jdbcType="VARCHAR" property="type" />
+		<result column="url" jdbcType="VARCHAR" property="url" />
+		<result column="permission" jdbcType="VARCHAR" property="permission" />
+		<result column="icon" jdbcType="VARCHAR" property="icon" />
+		<result column="is_initialized" jdbcType="BIT" property="isInitialized" />
+		<result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+		<result column="parent" jdbcType="BIGINT" property="parent" />
+		<result column="expanded" jdbcType="BIT" property="expanded" />
+		<result column="loaded" jdbcType="BIT" property="loaded" />
+		<result column="level" jdbcType="VARCHAR" property="level" />
+		<result column="isleaf" jdbcType="BIT" property="isleaf" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, name, type, url, permission, icon, is_initialized, sort_num, parent,
+		expanded,
+		loaded, level, isleaf
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_resource
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sys_resource
+		where id = #{id,jdbcType=BIGINT} and is_initialized != 1
+	</delete>
+	<insert id="insert" parameterType="com.bizdata.component.base.entity.SysResource">
+		insert into sys_resource (id, name, type,
+		url, permission, icon,
+		is_initialized, sort_num, parent,
+		expanded, loaded, level, isleaf
+		)
+		values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR},
+		#{type,jdbcType=VARCHAR},
+		#{url,jdbcType=VARCHAR}, #{permission,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR},
+		#{isInitialized,jdbcType=BIT}, #{sortNum,jdbcType=INTEGER},
+		#{parent,jdbcType=BIGINT},
+		#{expanded,jdbcType=BIT}, #{loaded,jdbcType=BIT}, #{level,jdbcType=VARCHAR},
+		#{isleaf,jdbcType=BIT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.bizdata.component.base.entity.SysResource">
+		insert into sys_resource
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+			<if test="permission != null">
+				permission,
+			</if>
+			<if test="icon != null">
+				icon,
+			</if>
+			<if test="isInitialized != null">
+				is_initialized,
+			</if>
+			<if test="sortNum != null">
+				sort_num,
+			</if>
+			<if test="parent != null">
+				parent,
+			</if>
+			<if test="expanded != null">
+				expanded,
+			</if>
+			<if test="loaded != null">
+				loaded,
+			</if>
+			<if test="level != null">
+				level,
+			</if>
+			<if test="isleaf != null">
+				isleaf,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+			<if test="permission != null">
+				#{permission,jdbcType=VARCHAR},
+			</if>
+			<if test="icon != null">
+				#{icon,jdbcType=VARCHAR},
+			</if>
+			<if test="isInitialized != null">
+				#{isInitialized,jdbcType=BIT},
+			</if>
+			<if test="sortNum != null">
+				#{sortNum,jdbcType=INTEGER},
+			</if>
+			<if test="parent != null">
+				#{parent,jdbcType=BIGINT},
+			</if>
+			<if test="expanded != null">
+				#{expanded,jdbcType=BIT},
+			</if>
+			<if test="loaded != null">
+				#{loaded,jdbcType=BIT},
+			</if>
+			<if test="level != null">
+				#{level,jdbcType=VARCHAR},
+			</if>
+			<if test="isleaf != null">
+				#{isleaf,jdbcType=BIT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.bizdata.component.base.entity.SysResource">
+		update sys_resource
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="permission != null">
+				permission = #{permission,jdbcType=VARCHAR},
+			</if>
+			<if test="icon != null">
+				icon = #{icon,jdbcType=VARCHAR},
+			</if>
+			<if test="isInitialized != null">
+				is_initialized = #{isInitialized,jdbcType=BIT},
+			</if>
+			<if test="sortNum != null">
+				sort_num = #{sortNum,jdbcType=INTEGER},
+			</if>
+			<if test="parent != null">
+				parent = #{parent,jdbcType=BIGINT},
+			</if>
+			<if test="expanded != null">
+				expanded = #{expanded,jdbcType=BIT},
+			</if>
+			<if test="loaded != null">
+				loaded = #{loaded,jdbcType=BIT},
+			</if>
+			<if test="level != null">
+				level = #{level,jdbcType=VARCHAR},
+			</if>
+			<if test="isleaf != null">
+				isleaf = #{isleaf,jdbcType=BIT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.bizdata.component.base.entity.SysResource">
+		update sys_resource
+		set name = #{name,jdbcType=VARCHAR},
+		type = #{type,jdbcType=VARCHAR},
+		url = #{url,jdbcType=VARCHAR},
+		permission = #{permission,jdbcType=VARCHAR},
+		icon = #{icon,jdbcType=VARCHAR},
+		is_initialized = #{isInitialized,jdbcType=BIT},
+		sort_num = #{sortNum,jdbcType=INTEGER},
+		parent = #{parent,jdbcType=BIGINT},
+		expanded = #{expanded,jdbcType=BIT},
+		loaded = #{loaded,jdbcType=BIT},
+		level = #{level,jdbcType=VARCHAR},
+		isleaf = #{isleaf,jdbcType=BIT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="findAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_resource order by sort_num asc
+	</select>
+
+	<select id="findChildens" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sys_resource
+		where parent = #{parent,jdbcType=BIGINT}
+	</select>
+	
+	<select id="selectCountByParent" resultType="java.lang.Integer" parameterType="java.lang.Long">
+		select count(1) from sys_resource where parent=#{parent}
+	</select>
+</mapper>

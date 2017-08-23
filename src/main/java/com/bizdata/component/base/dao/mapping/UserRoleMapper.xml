@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bizdata.component.base.dao.UserRoleMapper">
+	<resultMap id="BaseResultMap" type="com.bizdata.component.base.entity.UserRole">
+		<result column="userid" property="userid" jdbcType="BIGINT" />
+		<result column="roleid" property="roleid" jdbcType="BIGINT" />
+	</resultMap>
+
+	<sql id="Base_Where_Clause">
+		<where>
+			<if test="userid != null">
+				userid=#{userid}
+			</if>
+			<if test="roleid != null">
+				AND roleid=#{roleid}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.bizdata.component.base.entity.UserRole">
+		insert into sys_user_role
+		(userid, roleid)
+		values (#{userid,jdbcType=BIGINT},
+		#{roleid,jdbcType=BIGINT})
+	</insert>
+
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into sys_user_role (userid, roleid)
+		values
+		<foreach collection="list" item="item" separator=",">
+			(#{item.userid,jdbcType=BIGINT}, #{item.roleid,jdbcType=BIGINT})
+		</foreach>
+	</insert>
+
+	<insert id="insertSelective" parameterType="com.bizdata.component.base.entity.UserRole">
+		insert into sys_user_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				userid,
+			</if>
+			<if test="roleid != null">
+				roleid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				#{userid,jdbcType=BIGINT},
+			</if>
+			<if test="roleid != null">
+				#{roleid,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+
+	<delete id="deleteUserRoleBycond" parameterType="com.bizdata.component.base.entity.UserRole">
+		delete from sys_user_role
+		<include refid="Base_Where_Clause"></include>
+	</delete>
+</mapper>

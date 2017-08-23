@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bizdata.component.base.dao.RoleMapper">
+	<resultMap id="BaseResultMap" type="com.bizdata.component.base.entity.Role">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="role" property="role" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="RoleResourceResultMap" type="com.bizdata.component.base.entity.Role"
+		extends="BaseResultMap">
+		<collection property="resourceList" column="id" javaType="ArrayList"
+			ofType="SysResource" select="selectResources"></collection>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, role, description
+	</sql>
+	<sql id="Base_Where_Clause">
+		<where>
+			<if test="role != null">
+				role=#{role}
+			</if>
+			<if test="description != null">
+				AND description=#{description}
+			</if>
+		</where>
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sys_role
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectWithResByPrimaryKey" resultMap="RoleResourceResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sys_role
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectResources" parameterType="java.lang.Long"
+		resultType="com.bizdata.component.base.entity.SysResource">
+		select
+		<include
+			refid="com.bizdata.component.base.dao.SysResourceMapper.Base_Column_List" />
+		from sys_resource res join sys_role_resource rr on
+		rr.resourceid=res.id where roleid =#{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sys_role
+	</select>
+
+	<select id="selectAllWithRes" resultMap="RoleResourceResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sys_role
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		sys_role
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+
+	<insert id="insert" parameterType="com.bizdata.component.base.entity.Role">
+		insert into sys_role (id,
+		role, description)
+		values (#{id,jdbcType=BIGINT},
+		#{role,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.bizdata.component.base.entity.Role">
+		insert into sys_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="role != null">
+				role,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="role != null">
+				#{role,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.bizdata.component.base.entity.Role">
+		update sys_role
+		<set>
+			<if test="role != null">
+				role = #{role,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.bizdata.component.base.entity.Role">
+		update sys_role
+		set role = #{role,jdbcType=VARCHAR},description =
+		#{description,jdbcType=VARCHAR} where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

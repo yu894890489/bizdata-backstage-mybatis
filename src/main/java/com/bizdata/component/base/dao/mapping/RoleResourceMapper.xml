@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bizdata.component.base.dao.RoleResourceMapper">
+	<resultMap id="BaseResultMap" type="com.bizdata.component.base.entity.RoleResource">
+		<result column="roleid" property="roleid" jdbcType="BIGINT" />
+		<result column="resourceid" property="resourceid" jdbcType="BIGINT" />
+	</resultMap>
+	<sql id="Base_Where_Clause">
+		<where>
+			<if test="roleid != null">
+				roleid=#{roleid}
+			</if>
+			<if test="resourceid != null">
+				AND resourceid=#{resourceid}
+			</if>
+		</where>
+	</sql>
+	<insert id="insert" parameterType="com.bizdata.component.base.entity.RoleResource">
+		insert into sys_role_resource (roleid, resourceid)
+		values (#{roleid,jdbcType=BIGINT}, #{resourceid,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.bizdata.component.base.entity.RoleResource">
+		insert into sys_role_resource
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleid != null">
+				roleid,
+			</if>
+			<if test="resourceid != null">
+				resourceid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleid != null">
+				#{roleid,jdbcType=BIGINT},
+			</if>
+			<if test="resourceid != null">
+				#{resourceid,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<delete id="deleteRoleResourceBycond" parameterType="com.bizdata.component.base.entity.RoleResource">
+		delete from
+		sys_role_resource
+		<include refid="Base_Where_Clause"></include>
+	</delete>
+	
+	<delete id="deleteRoleResourceByResourceId" parameterType="java.lang.Long">
+		delete from
+		sys_role_resource
+		where resourceid=#{resourceid,jdbcType=BIGINT}
+	</delete>
+</mapper>
