@@ -113,6 +113,6 @@ public interface UserService {
 	 * @return PageMyBatis<User>
 	 * @update 2015-5-4 上午11:15:22
 	 */
-	public PageInfo<User> selectUserByCondByPage(int page, int rows, User user);
+	PageInfo<User> selectUserByCondByPage(int page, int rows, User user);
 
 }
